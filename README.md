@@ -3,6 +3,7 @@
 **Zero-Backend Financial Fraud, Business Email Compromise (BEC) & Digital Coercion Triage Workbench — with Defensive Outbound DLP, Multi-Currency Exposure De-duplication & Dual-Mode A4 Recall Schedules**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16718/badge)](https://www.bestpractices.dev/projects/16718)
 [![REUSE 3.3 Compliant](https://img.shields.io/badge/REUSE-3.3%20Compliant-brightgreen)](./REUSE.toml)
 [![SLSA Level 3](https://img.shields.io/badge/SLSA-Build%20Level%203-0f766e)](https://github.com/Ziqi/clearlens/attestations)
 [![Zero Dependencies](https://img.shields.io/badge/Runtime%20Dependencies-0%20(Stdlib%20%2B%20Vanilla%20JS)-success)](./pyproject.toml)
@@ -42,9 +43,13 @@ During the **Golden 72 Hours** of an active **Business Email Compromise (BEC)** 
 - Open **<https://ziqi.github.io/clearlens/app.html>**, or download `clearlens-offline-v1.0.0.zip` from [GitHub Releases](https://github.com/Ziqi/clearlens/releases), verify its SLSA Level 3 provenance, disconnect Wi-Fi, and double-click `web/app.html`.
 - Click **`Load Synthetic BEC Demo`** in the top toolbar to explore the 100% synthetic `Apex Maritime GmbH` (`SYN-BEC-2026-041`) cross-border invoice interception dataset.
 
-### Option B — Python `>= 3.10` CLI Verification & Ledger Toolkit (Zero Dependencies)
+### Option B — Python `>= 3.10` CLI & Homebrew Installation (Zero Dependencies)
 
 ```bash
+# Install via official Homebrew Tap (macOS / Linux)
+brew install Ziqi/tap/clearlens
+
+# Or run directly from a clean source checkout
 git clone https://github.com/Ziqi/clearlens.git
 cd clearlens
 

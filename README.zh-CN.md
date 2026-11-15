@@ -3,6 +3,7 @@
 **零后端跨境电汇欺诈（BEC）与反社工胁迫应急分诊工作台 —— 内置防御性外发敏感词阻断（Outbound DLP）、多币种内部换汇穿透剥离与双模 A4 紧急止付召回清册**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16718/badge)](https://www.bestpractices.dev/projects/16718)
 [![REUSE 3.3 Compliant](https://img.shields.io/badge/REUSE-3.3%20Compliant-brightgreen)](./REUSE.toml)
 [![SLSA Level 3](https://img.shields.io/badge/SLSA-Build%20Level%203-0f766e)](https://github.com/Ziqi/clearlens/attestations)
 [![Zero Dependencies](https://img.shields.io/badge/零第三方依赖-Python%20Stdlib%20%2B%20原生JS-success)](./pyproject.toml)
@@ -45,6 +46,10 @@
 ## 30 秒快速上手
 
 ```bash
+# 方式一：通过官方 Homebrew Tap 一键安装（macOS / Linux）
+brew install Ziqi/tap/clearlens
+
+# 方式二：克隆纯标准库源码运行
 git clone https://github.com/Ziqi/clearlens.git
 cd clearlens
 

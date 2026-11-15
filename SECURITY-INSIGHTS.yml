@@ -7,7 +7,8 @@ header:
   last-reviewed: '2026-11-15'
   url: https://github.com/Ziqi/clearlens/blob/main/SECURITY-INSIGHTS.yml
   comment: >
-    Machine-readable OpenSSF Security Insights (v2.0.0) and OSPS Baseline
+    Machine-readable OpenSSF Security Insights (v2.0.0), OpenSSF Best Practices
+    (#16718: https://www.bestpractices.dev/projects/16718), and OSPS Baseline
     Level 3 manifest for ClearLens.
 
 project:

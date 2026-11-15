@@ -511,6 +511,7 @@
       </div>
       <div class="badge-strip">
         <span class="spec-badge">License: MIT (REUSE 3.3 SPDX)</span>
+        <a class="spec-badge" href="https://www.bestpractices.dev/projects/16718" target="_blank" rel="noopener noreferrer">OpenSSF Best Practices: #16718</a>
         <span class="spec-badge">Runtime Deps: 0 (Stdlib + Vanilla JS)</span>
         <span class="spec-badge">Checksums: ISO 13616 Mod-97 &amp; Luhn</span>
         <span class="spec-badge">Fuzzing: ClusterFuzzLite + Atheris</span>
@@ -590,7 +591,7 @@ Net Exposure   : USD 21,153.00  [VERIFIED]</pre>
   <section class="section">
     <div class="section-head">
       <h2 data-i18n="sec_sec_title">Verifiable Security &amp; Clean-Room Architecture</h2>
-      <p data-i18n="sec_sec_sub">Aligned with OpenSSF Best Practices Silver, OpenSSF OSPS Baseline Level 3 (EU CRA), and SLSA Build Level 3.</p>
+      <p data-i18n="sec_sec_sub">Aligned with OpenSSF Best Practices Silver (#16718), OpenSSF OSPS Baseline Level 3 (EU CRA), and SLSA Build Level 3.</p>
     </div>
 
     <div class="guarantees-grid">
@@ -618,8 +619,8 @@ Net Exposure   : USD 21,153.00  [VERIFIED]</pre>
         </p>
         <a class="btn btn-primary" href="./app.html" data-i18n="cli_btn">Launch Workbench Now &rarr;</a>
       </div>
-      <pre class="code-block">git clone https://github.com/Ziqi/clearlens.git
-cd clearlens
+      <pre class="code-block">brew install Ziqi/tap/clearlens
+git clone https://github.com/Ziqi/clearlens.git &amp;&amp; cd clearlens
 python3 -m clearlens verify ./web
 python3 -m clearlens serve --host 127.0.0.1 --port 8765</pre>
     </div>
@@ -633,6 +634,7 @@ python3 -m clearlens serve --host 127.0.0.1 --port 8765</pre>
     <div class="footer-links">
       <a href="./app.html" data-i18n="f_app">Offline Workbench</a>
       <a href="https://github.com/Ziqi/clearlens" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+      <a href="https://www.bestpractices.dev/projects/16718" target="_blank" rel="noopener noreferrer">OpenSSF #16718</a>
       <a href="https://github.com/Ziqi/clearlens/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">SECURITY.md</a>
       <a href="https://ziqi.github.io/starshield/" target="_blank" rel="noopener noreferrer">StarShield Forensics</a>
     </div>
@@ -672,7 +674,7 @@ python3 -m clearlens serve --host 127.0.0.1 --port 8765</pre>
       c4_b1: "Includes built-in 100% synthetic BEC benchmark preset (Apex Maritime GmbH)",
       c4_b2: "Native browser @media print A4 layout with zero third-party PDF servers",
       sec_sec_title: "Verifiable Security & Clean-Room Architecture",
-      sec_sec_sub: "Aligned with OpenSSF Best Practices Silver, OpenSSF OSPS Baseline Level 3 (EU CRA), and SLSA Build Level 3.",
+      sec_sec_sub: "Aligned with OpenSSF Best Practices Silver (#16718), OpenSSF OSPS Baseline Level 3 (EU CRA), and SLSA Build Level 3.",
       g1_title: "Enforced Browser Network Isolation",
       g1_desc: "Locked down via meta Content-Security-Policy (default-src 'none'). Uploaded receipt images use ephemeral blob: URLs in local RAM and are revoked immediately upon tab close.",
       g2_title: "Companion Ecosystem with StarShield",
@@ -715,7 +717,7 @@ python3 -m clearlens serve --host 127.0.0.1 --port 8765</pre>
       c4_b1: "内置 100% 净室合成跨国航运结算 BEC 演示数据集（Apex Maritime GmbH）",
       c4_b2: "原生浏览器 @media print A4 排版直出 PDF，零第三方转换服务器",
       sec_sec_title: "可验证供应链安全与净室架构承诺",
-      sec_sec_sub: "全面对齐 OpenSSF Best Practices 银牌规范、OpenSSF OSPS Baseline Level 3（欧盟 CRA）与 SLSA Build Level 3。",
+      sec_sec_sub: "全面对齐 OpenSSF Best Practices 银牌规范（#16718）、OpenSSF OSPS Baseline Level 3（欧盟 CRA）与 SLSA Build Level 3。",
       g1_title: "浏览器级 CSP 强制断网隔离",
       g1_desc: "通过 meta Content-Security-Policy (default-src 'none') 锁定零外联；本地回单图片仅通过临时 blob: 内存引用展示，关闭标签页即刻销毁。",
       g2_title: "与 StarShield 电子取证套件协同",
