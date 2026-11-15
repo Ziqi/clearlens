@@ -1,0 +1,67 @@
+# SPDX-FileCopyrightText: 2026 Ziqi Xiao
+# SPDX-License-Identifier: MIT
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clearlens"
+version = "1.0.0"
+description = "Zero-backend financial fraud, BEC & digital coercion triage workbench with offline CSP auditing, multi-currency ledger de-duplication, and defensive outbound DLP guardrails."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [
+  {name = "Ziqi Xiao", email = "2196305+Ziqi@users.noreply.github.com"}
+]
+keywords = [
+  "bec",
+  "incident-response",
+  "fraud-triage",
+  "outbound-dlp",
+  "digital-forensics",
+  "offline-first",
+  "zero-dependency",
+  "iban-mod97"
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Environment :: Web Environment",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Intended Audience :: Information Technology",
+  "Intended Audience :: Legal Industry",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Security",
+  "Topic :: Office/Business :: Financial :: Accounting"
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://ziqi.github.io/clearlens/"
+Repository = "https://github.com/Ziqi/clearlens"
+Documentation = "https://ziqi.github.io/clearlens/"
+Security = "https://github.com/Ziqi/clearlens/blob/main/SECURITY.md"
+Issues = "https://github.com/Ziqi/clearlens/issues"
+
+[project.scripts]
+clearlens = "clearlens.cli:main"
+
+[tool.setuptools]
+packages = ["clearlens"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B"]
+ignore = ["E501"]

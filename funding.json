@@ -1,0 +1,65 @@
+{
+  "$schema": "https://floss.fund/schema/v1.0.0/funding.schema.json",
+  "version": "v1.0.0",
+  "entity": {
+    "type": "individual",
+    "role": "maintainer",
+    "name": "Ziqi Xiao",
+    "email": "sinoziqi@proton.me",
+    "description": "Independent security architect and digital forensics engineer maintaining StarShield Forensics and ClearLens.",
+    "webpageUrl": {
+      "url": "https://ziqi.github.io/clearlens/",
+      "wellKnown": "https://github.com/Ziqi/clearlens/blob/main/.well-known/funding-manifest-urls"
+    }
+  },
+  "projects": [
+    {
+      "guid": "clearlens",
+      "name": "ClearLens",
+      "description": "Zero-backend, offline-first Business Email Compromise (BEC), wire-fraud, and digital coercion triage workbench with defensive Outbound DLP guardrails, multi-currency FX de-duplication, and print-ready A4 SWIFT recall schedules.",
+      "webpageUrl": {
+        "url": "https://ziqi.github.io/clearlens/",
+        "wellKnown": "https://github.com/Ziqi/clearlens/blob/main/.well-known/funding-manifest-urls"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/Ziqi/clearlens",
+        "wellKnown": "https://github.com/Ziqi/clearlens/blob/main/.well-known/funding-manifest-urls"
+      },
+      "licenses": [
+        "spdx:MIT"
+      ],
+      "tags": [
+        "security",
+        "privacy",
+        "incident-response",
+        "dlp",
+        "accounting",
+        "python"
+      ]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "swift-iban-grant-transfer",
+        "type": "bank",
+        "address": "Direct international wire (SWIFT / IBAN / ACH) coordinated upon grant award via maintainer security contact.",
+        "description": "Non-dilutive open-source grant settlement channel for foundations and institutional sponsors."
+      }
+    ],
+    "plans": [
+      {
+        "guid": "offline-bec-triage-sustainability",
+        "status": "active",
+        "name": "ISO 20022 Recall Mapping, Continuous Fuzzing & Localization Sustainability",
+        "description": "Supports ongoing maintenance, ISO 20022 camt.056/pacs.008 offline schema support, continuous fuzzing, and signed air-gapped distributions.",
+        "amount": 15000,
+        "currency": "USD",
+        "frequency": "yearly",
+        "channels": [
+          "swift-iban-grant-transfer"
+        ]
+      }
+    ]
+  }
+}

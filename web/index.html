@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<!-- SPDX-FileCopyrightText: 2026 Ziqi Xiao -->
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none';">
+<meta name="referrer" content="no-referrer">
+<title>ClearLens (澄镜) v1.0 — Zero-Backend BEC, Wire Fraud &amp; Digital Coercion Triage Workbench</title>
+<style>
+  :root {
+    --bg-page: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --navy-950: #020617;
+    --navy-900: #0F172A;
+    --navy-800: #1E293B;
+    --slate-700: #334155;
+    --slate-600: #475569;
+    --slate-500: #64748B;
+    --border-soft: #CBD5E1;
+    --border-light: #E2E8F0;
+    --emerald-800: #065F46;
+    --emerald-700: #047857;
+    --emerald-600: #059669;
+    --emerald-50: #ECFDF5;
+    --blue-700: #1D4ED8;
+    --blue-600: #2563EB;
+    --blue-50: #EFF6FF;
+    --amber-700: #B45309;
+    --amber-50: #FFFBEB;
+    --crimson-700: #B91C1C;
+    --crimson-50: #FEF2F2;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg-page);
+    color: var(--navy-900);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .trust-strip {
+    background: var(--navy-950);
+    color: #ECFDF5;
+    border-bottom: 2px solid var(--emerald-600);
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+
+  .trust-strip-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .trust-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+
+  .trust-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #34D399;
+    display: inline-block;
+  }
+
+  .csp-code {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 3px 8px;
+    border-radius: 4px;
+    color: #A7F3D0;
+  }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 22px;
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-light);
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: var(--navy-900);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -0.5px;
+  }
+
+  .brand-title {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+
+  .brand-subtitle {
+    font-size: 12px;
+    color: var(--slate-500);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-primary {
+    background: var(--blue-700);
+    color: #FFFFFF;
+  }
+
+  .btn-primary:hover {
+    background: #1E40AF;
+  }
+
+  .btn-outline {
+    background: #FFFFFF;
+    color: var(--navy-900);
+    border-color: var(--border-soft);
+  }
+
+  .btn-outline:hover {
+    background: #F1F5F9;
+  }
+
+  .btn-lang {
+    background: var(--emerald-50);
+    color: var(--emerald-800);
+    border-color: #A7F3D0;
+    font-family: var(--mono);
+    font-size: 12.5px;
+  }
+
+  .hero {
+    padding: 52px 0 40px;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 32px;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 34px 0 28px;
+    }
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-50);
+    color: var(--blue-700);
+    border: 1px solid #BFDBFE;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+    line-height: 1.22;
+    letter-spacing: -0.6px;
+    margin-bottom: 16px;
+    color: var(--navy-950);
+  }
+
+  .hero-lead {
+    font-size: 16px;
+    color: var(--slate-600);
+    margin-bottom: 24px;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+
+  .badge-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .spec-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-soft);
+    color: var(--slate-700);
+  }
+
+  .arch-card {
+    background: var(--navy-900);
+    color: #F8FAFC;
+    border-radius: 14px;
+    padding: 24px;
+    border: 1px solid #334155;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+  }
+
+  .arch-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #334155;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #94A3B8;
+  }
+
+  .arch-pre {
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.65;
+    color: #E2E8F0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+
+  .arch-highlight {
+    color: #34D399;
+    font-weight: 700;
+  }
+
+  .section {
+    padding: 38px 0;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .section-head {
+    margin-bottom: 24px;
+  }
+
+  .section-head h2 {
+    font-size: 24px;
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+
+  .section-head p {
+    color: var(--slate-600);
+    font-size: 14.5px;
+  }
+
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  @media (max-width: 760px) {
+    .grid-4 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cabin-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 22px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .cabin-card:hover {
+    border-color: #93C5FD;
+    box-shadow: 0 6px 18px rgba(29, 78, 216, 0.06);
+  }
+
+  .cabin-num {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 5px;
+    background: var(--blue-50);
+    color: var(--blue-700);
+    margin-bottom: 10px;
+  }
+
+  .cabin-card h3 {
+    font-size: 17px;
+    margin-bottom: 8px;
+    color: var(--navy-900);
+  }
+
+  .cabin-card p {
+    font-size: 13.8px;
+    color: var(--slate-600);
+    margin-bottom: 12px;
+  }
+
+  .cabin-bullets {
+    list-style: none;
+    font-size: 13px;
+    color: var(--slate-700);
+  }
+
+  .cabin-bullets li {
+    padding: 3px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+  }
+
+  .cabin-bullets li::before {
+    content: "✓";
+    color: var(--emerald-600);
+    font-weight: 800;
+  }
+
+  .guarantees-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 820px) {
+    .guarantees-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .guarantee-box {
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    border-left: 4px solid var(--emerald-600);
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .guarantee-box h4 {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  .guarantee-box p {
+    font-size: 13.2px;
+    color: var(--slate-600);
+  }
+
+  .cli-panel {
+    background: #FFFFFF;
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+  }
+
+  @media (max-width: 820px) {
+    .cli-panel {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .code-block {
+    background: var(--navy-950);
+    color: #E2E8F0;
+    font-family: var(--mono);
+    font-size: 12.2px;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    line-height: 1.65;
+  }
+
+  .site-footer {
+    margin-top: 28px;
+    padding: 28px 0 42px;
+    border-top: 1px solid var(--border-soft);
+    font-size: 12.8px;
+    color: var(--slate-500);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    color: var(--blue-700);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="trust-strip">
+  <div class="trust-strip-inner">
+    <span class="trust-pill">
+      <span class="trust-dot"></span>
+      <span data-i18n="trust_text">Zero-Backend Client-Side Architecture: 0 Cookies · 0 Cloud Uploads · 0 Telemetry · Strict Offline CSP</span>
+    </span>
+    <span class="csp-code">default-src 'none'; base-uri 'none'; form-action 'none'</span>
+  </div>
+</div>
+
+<div class="container">
+  <header class="site-header">
+    <div class="brand">
+      <div class="brand-logo">CL</div>
+      <div>
+        <div class="brand-title" data-i18n="brand_title">ClearLens · 澄镜 v1.0.0</div>
+        <div class="brand-subtitle" data-i18n="brand_sub">Zero-Backend BEC, Wire Fraud &amp; Digital Coercion Triage Workbench</div>
+      </div>
+    </div>
+    <nav class="nav-actions">
+      <button type="button" class="btn btn-lang" id="btn-lang-toggle" aria-label="Switch Language">中文 / EN</button>
+      <a class="btn btn-outline" href="https://github.com/Ziqi/clearlens" target="_blank" rel="noopener noreferrer">GitHub (MIT)</a>
+      <a class="btn btn-primary" href="./app.html" data-i18n="nav_launch">Launch Offline Workbench &rarr;</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow" data-i18n="hero_eyebrow">OSI MIT Open Source · Pure Local RAM Execution · SLSA Build Level 3</div>
+      <h1 data-i18n="hero_h1">Golden-72h Triage, Outbound DLP &amp; Multi-Currency Exposure De-duplication Without Cloud Leakage.</h1>
+      <p class="hero-lead" data-i18n="hero_lead">
+        During active Business Email Compromise (BEC), spoofed vendor invoice interception, or coercive social-engineering incidents, pasting raw bank ledgers or recall drafts into cloud SaaS leaks sensitive PII. ClearLens executes 100% inside local browser RAM or Python 3.10+ stdlib.
+      </p>
+      <div class="hero-cta-row">
+        <a class="btn btn-primary" href="./app.html" data-i18n="cta_open_app">Open 4-Cabin Workbench (Zero Install)</a>
+        <a class="btn btn-outline" href="https://github.com/Ziqi/clearlens/releases" target="_blank" rel="noopener noreferrer" data-i18n="cta_download_zip">Download Signed Air-Gapped ZIP</a>
+      </div>
+      <div class="badge-strip">
+        <span class="spec-badge">License: MIT (REUSE 3.3 SPDX)</span>
+        <span class="spec-badge">Runtime Deps: 0 (Stdlib + Vanilla JS)</span>
+        <span class="spec-badge">Checksums: ISO 13616 Mod-97 &amp; Luhn</span>
+        <span class="spec-badge">Fuzzing: ClusterFuzzLite + Atheris</span>
+      </div>
+    </div>
+
+    <div class="arch-card" aria-label="Verification CLI Quickstart">
+      <div class="arch-card-header">
+        <span>clearlens-cli · deterministic verification</span>
+        <span>Python &ge; 3.10</span>
+      </div>
+      <pre class="arch-pre"><span class="arch-highlight">$ python3 -m clearlens verify ./web</span>
+{
+  "html_files_checked": 2,
+  "all_passed": true,
+  "csp_policy": "default-src 'none'; base-uri 'none'"
+}
+
+<span class="arch-highlight">$ python3 -m clearlens demo</span>
+Case Ref       : SYN-BEC-2026-041 (Apex Maritime GmbH)
+Gross Touched  : USD 51,176.60
+Internal FX    : USD 23,870.00  [STRIPPED]
+Risk-Held Pool : USD  6,153.60  [EXCLUDED]
+Net Exposure   : USD 21,153.00  [VERIFIED]</pre>
+    </div>
+  </section>
+
+  <section class="section" id="cabins">
+    <div class="section-head">
+      <h2 data-i18n="sec_cabins_title">Four Deterministic Incident-Response Cabins</h2>
+      <p data-i18n="sec_cabins_sub">Purpose-built for corporate treasury responders, cross-border legal counsel, and household crisis containment.</p>
+    </div>
+
+    <div class="grid-4">
+      <article class="cabin-card">
+        <span class="cabin-num">CABIN 01 · CONTAINMENT &amp; IOC HYGIENE</span>
+        <h3 data-i18n="c1_title">Severity Triage &amp; Persistence Audit</h3>
+        <p data-i18n="c1_desc">Structured 6-step containment checklist eliminating silent mailbox forwarding rules, rogue OAuth delegates, screen-share persistence, and SIM call diversion while preserving bank SWIFT recall rails.</p>
+        <ul class="cabin-bullets">
+          <li data-i18n="c1_b1">Freeze outbound transfers ONLY — never close accounts needed for SWIFT gpi recall returns</li>
+          <li data-i18n="c1_b2">Browser-local IBAN Mod-97, Luhn card, and SWIFT/BIC extraction from raw headers</li>
+        </ul>
+      </article>
+
+      <article class="cabin-card">
+        <span class="cabin-num">CABIN 02 · DEFENSIVE OUTBOUND DLP</span>
+        <h3 data-i18n="c2_title">Outbound DLP &amp; Crisis De-escalation Guardrail</h3>
+        <p data-i18n="c2_desc">Blue-team pre-flight scanner preventing accidental disclosure of law-enforcement filings, SWIFT recall references, OTP codes, or internal account identifiers before freeze orders settle.</p>
+        <ul class="cabin-bullets">
+          <li data-i18n="c2_b1">Blocks operational tip-off terms, unredacted IBANs/cards, and confrontational tone spikes</li>
+          <li data-i18n="c2_b2">HMAC-style local PII redaction prior to optional loopback Ollama (127.0.0.1:11434) drafting</li>
+        </ul>
+      </article>
+
+      <article class="cabin-card">
+        <span class="cabin-num">CABIN 03 · MULTI-CURRENCY LEDGER ENGINE</span>
+        <h3 data-i18n="c3_title">Internal FX Stripping &amp; Net Exposure Reconciliation</h3>
+        <p data-i18n="c3_desc">Side-by-side local RAM receipt inspector, UTC session-window alignment calculator, and multi-currency ledger engine that automatically strips same-entity treasury FX sweeps and bank-held transfers.</p>
+        <ul class="cabin-bullets">
+          <li data-i18n="c3_b1">Eliminates double-counted internal FX hops in multi-jurisdiction fraud filings</li>
+          <li data-i18n="c3_b2">Pure inline SVG fund-flow topology &amp; CSV/JSON air-gapped export</li>
+        </ul>
+      </article>
+
+      <article class="cabin-card">
+        <span class="cabin-num">CABIN 04 · DUAL-MODE A4 WORKPAPER</span>
+        <h3 data-i18n="c4_title">Standardized Bank Recall &amp; Evidentiary Schedule</h3>
+        <p data-i18n="c4_desc">Generates print-ready A4 schedules in two modes: a Full Bank Recall &amp; Law-Enforcement Schedule and a Redacted External Counsel Brief masking internal payer accounts.</p>
+        <ul class="cabin-bullets">
+          <li data-i18n="c4_b1">Includes built-in 100% synthetic BEC benchmark preset (Apex Maritime GmbH)</li>
+          <li data-i18n="c4_b2">Native browser @media print A4 layout with zero third-party PDF servers</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2 data-i18n="sec_sec_title">Verifiable Security &amp; Clean-Room Architecture</h2>
+      <p data-i18n="sec_sec_sub">Aligned with OpenSSF Best Practices Silver, OpenSSF OSPS Baseline Level 3 (EU CRA), and SLSA Build Level 3.</p>
+    </div>
+
+    <div class="guarantees-grid">
+      <div class="guarantee-box">
+        <h4 data-i18n="g1_title">Enforced Browser Network Isolation</h4>
+        <p data-i18n="g1_desc">Locked down via meta Content-Security-Policy (default-src 'none'). Uploaded receipt images use ephemeral blob: URLs in local RAM and are revoked immediately upon tab close.</p>
+      </div>
+      <div class="guarantee-box">
+        <h4 data-i18n="g2_title">Companion Ecosystem with StarShield</h4>
+        <p data-i18n="g2_desc">Pairs seamlessly with starshield-forensics (Chromium LevelDB/IndexedDB WAL carver &amp; PNG/JPEG container provenance inspector) for end-to-end evidentiary triage.</p>
+      </div>
+      <div class="guarantee-box">
+        <h4 data-i18n="g3_title">100% Synthetic Clean-Room Corpus</h4>
+        <p data-i18n="g3_desc">All bundled presets, IBANs (DE89370400440532013000 / GB82WEST12345698765432), and Luhn accounts follow official ISO test specifications with zero real-world PII.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="cli-panel">
+      <div>
+        <h2 style="font-size:21px;margin-bottom:8px;" data-i18n="cli_title">Air-Gapped Local Deployment &amp; CLI Audit</h2>
+        <p style="font-size:14px;color:var(--slate-600);margin-bottom:14px;" data-i18n="cli_desc">
+          Run ClearLens directly in your browser from GitHub Pages, open web/app.html from an offline USB drive, or audit and serve via the zero-dependency Python 3.10+ package.
+        </p>
+        <a class="btn btn-primary" href="./app.html" data-i18n="cli_btn">Launch Workbench Now &rarr;</a>
+      </div>
+      <pre class="code-block">git clone https://github.com/Ziqi/clearlens.git
+cd clearlens
+python3 -m clearlens verify ./web
+python3 -m clearlens serve --host 127.0.0.1 --port 8765</pre>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div>
+      <strong data-i18n="footer_copy">ClearLens (澄镜) v1.0.0 · Authored by Ziqi Xiao · MIT License</strong><br>
+      <span data-i18n="footer_disclaimer">Independent blue-team incident triage &amp; accounting reconciliation software. Does not constitute formal legal advice.</span>
+    </div>
+    <div class="footer-links">
+      <a href="./app.html" data-i18n="f_app">Offline Workbench</a>
+      <a href="https://github.com/Ziqi/clearlens" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+      <a href="https://github.com/Ziqi/clearlens/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">SECURITY.md</a>
+      <a href="https://ziqi.github.io/starshield/" target="_blank" rel="noopener noreferrer">StarShield Forensics</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var DICT = {
+    en: {
+      trust_text: "Zero-Backend Client-Side Architecture: 0 Cookies · 0 Cloud Uploads · 0 Telemetry · Strict Offline CSP",
+      brand_title: "ClearLens · 澄镜 v1.0.0",
+      brand_sub: "Zero-Backend BEC, Wire Fraud & Digital Coercion Triage Workbench",
+      nav_launch: "Launch Offline Workbench \u2192",
+      hero_eyebrow: "OSI MIT Open Source · Pure Local RAM Execution · SLSA Build Level 3",
+      hero_h1: "Golden-72h Triage, Outbound DLP & Multi-Currency Exposure De-duplication Without Cloud Leakage.",
+      hero_lead: "During active Business Email Compromise (BEC), spoofed vendor invoice interception, or coercive social-engineering incidents, pasting raw bank ledgers or recall drafts into cloud SaaS leaks sensitive PII. ClearLens executes 100% inside local browser RAM or Python 3.10+ stdlib.",
+      cta_open_app: "Open 4-Cabin Workbench (Zero Install)",
+      cta_download_zip: "Download Signed Air-Gapped ZIP",
+      sec_cabins_title: "Four Deterministic Incident-Response Cabins",
+      sec_cabins_sub: "Purpose-built for corporate treasury responders, cross-border legal counsel, and household crisis containment.",
+      c1_title: "Severity Triage & Persistence Audit",
+      c1_desc: "Structured 6-step containment checklist eliminating silent mailbox forwarding rules, rogue OAuth delegates, screen-share persistence, and SIM call diversion while preserving bank SWIFT recall rails.",
+      c1_b1: "Freeze outbound transfers ONLY — never close accounts needed for SWIFT gpi recall returns",
+      c1_b2: "Browser-local IBAN Mod-97, Luhn card, and SWIFT/BIC extraction from raw headers",
+      c2_title: "Outbound DLP & Crisis De-escalation Guardrail",
+      c2_desc: "Blue-team pre-flight scanner preventing accidental disclosure of law-enforcement filings, SWIFT recall references, OTP codes, or internal account identifiers before freeze orders settle.",
+      c2_b1: "Blocks operational tip-off terms, unredacted IBANs/cards, and confrontational tone spikes",
+      c2_b2: "HMAC-style local PII redaction prior to optional loopback Ollama (127.0.0.1:11434) drafting",
+      c3_title: "Internal FX Stripping & Net Exposure Reconciliation",
+      c3_desc: "Side-by-side local RAM receipt inspector, UTC session-window alignment calculator, and multi-currency ledger engine that automatically strips same-entity treasury FX sweeps and bank-held transfers.",
+      c3_b1: "Eliminates double-counted internal FX hops in multi-jurisdiction fraud filings",
+      c3_b2: "Pure inline SVG fund-flow topology & CSV/JSON air-gapped export",
+      c4_title: "Standardized Bank Recall & Evidentiary Schedule",
+      c4_desc: "Generates print-ready A4 schedules in two modes: a Full Bank Recall & Law-Enforcement Schedule and a Redacted External Counsel Brief masking internal payer accounts.",
+      c4_b1: "Includes built-in 100% synthetic BEC benchmark preset (Apex Maritime GmbH)",
+      c4_b2: "Native browser @media print A4 layout with zero third-party PDF servers",
+      sec_sec_title: "Verifiable Security & Clean-Room Architecture",
+      sec_sec_sub: "Aligned with OpenSSF Best Practices Silver, OpenSSF OSPS Baseline Level 3 (EU CRA), and SLSA Build Level 3.",
+      g1_title: "Enforced Browser Network Isolation",
+      g1_desc: "Locked down via meta Content-Security-Policy (default-src 'none'). Uploaded receipt images use ephemeral blob: URLs in local RAM and are revoked immediately upon tab close.",
+      g2_title: "Companion Ecosystem with StarShield",
+      g2_desc: "Pairs seamlessly with starshield-forensics (Chromium LevelDB/IndexedDB WAL carver & PNG/JPEG container provenance inspector) for end-to-end evidentiary triage.",
+      g3_title: "100% Synthetic Clean-Room Corpus",
+      g3_desc: "All bundled presets, IBANs (DE89370400440532013000 / GB82WEST12345698765432), and Luhn accounts follow official ISO test specifications with zero real-world PII.",
+      cli_title: "Air-Gapped Local Deployment & CLI Audit",
+      cli_desc: "Run ClearLens directly in your browser from GitHub Pages, open web/app.html from an offline USB drive, or audit and serve via the zero-dependency Python 3.10+ package.",
+      cli_btn: "Launch Workbench Now \u2192",
+      footer_copy: "ClearLens (澄镜) v1.0.0 · Authored by Ziqi Xiao · MIT License",
+      footer_disclaimer: "Independent blue-team incident triage & accounting reconciliation software. Does not constitute formal legal advice.",
+      f_app: "Offline Workbench"
+    },
+    zh: {
+      trust_text: "零后端纯本地安全架构：0 Cookie · 0 云端上传 · 0 遥测埋点 · 严格离线 CSP 网络物理阻断",
+      brand_title: "澄镜 ClearLens v1.0.0",
+      brand_sub: "零后端跨境电汇欺诈（BEC）与反社工胁迫应急分诊工作台",
+      nav_launch: "进入四舱离线工作台 \u2192",
+      hero_eyebrow: "OSI MIT 开源协议 · 纯浏览器本地内存运算 · SLSA L3 构建溯源",
+      hero_h1: "黄金 72 小时应急分诊、防御性外发 DLP 阻断与多币种流水穿透去重——全程零云端外泄。",
+      hero_lead: "在遭遇跨境商务电邮篡改（BEC）、供应商发票截留或高压社工胁迫事件时，将原始银行流水与沟通草稿粘贴至外部云端工具极易造成二次隐私泄露。澄镜 ClearLens 100% 运行于本地浏览器内存与 Python 3.10+ 标准库中。",
+      cta_open_app: "立即打开四舱单机工作台（免安装）",
+      cta_download_zip: "下载签名离线单机包（ZIP）",
+      sec_cabins_title: "四大确定性应急响应功能舱",
+      sec_cabins_sub: "专为跨国企业资金风控团队、涉外争议解决律师及个人/家庭反社工应急响应设计。",
+      c1_title: "风险分级与邮箱/通信暗桩排查舱",
+      c1_desc: "内置 6 步标准化止血核查表，逐项清理静默邮件自动转发规则、异常 OAuth 委派会话、远程控屏驻留与呼叫转移暗桩，同时保住银行电汇召回通道。",
+      c1_b1: "坚持“只冻结出账通道、绝不盲目销户”原则，保留 SWIFT gpi 资金原路退回落账载体",
+      c1_b2: "浏览器本地内存提取并校验 ISO 13616 IBAN Mod-97、Luhn 账号与 SWIFT/BIC 代码",
+      c2_title: "防御性外发敏感词阻断（DLP）与危机降噪预检舱",
+      c2_desc: "纯蓝队合规外发预检器：在银行电汇召回单与止付指令尚未落锁的窗口期，拦截意外泄露报警、召回工单号、验证码或内部主账号的回复草稿。",
+      c2_b1: "实时阻断打草惊蛇操作词、未脱敏金融账号及高压情绪化标点",
+      c2_b2: "支持本地哈希脱敏预览与可选本机回环 Ollama（127.0.0.1:11434）中性行政回复辅助",
+      c3_title: "多币种流水穿透去重与净敞口核算舱",
+      c3_desc: "支持同屏比对本地内存凭证截图、跨时区 UTC 会话窗口对齐计算，自动剥离企业/个人内部同名换汇调拨与银行风控拦截挂账项。",
+      c3_b1: "彻底消除多法域报案与银行申诉中因内部换汇中转导致的重复计损",
+      c3_b2: "内置纯矢量 SVG 资金流向拓扑图及 CSV / JSON 离线导出",
+      c4_title: "双模 A4 紧急止付召回与合规报案清册打印舱",
+      c4_desc: "一键切换生成「完整版银行召回与经侦报案要素清册」或「外部协作脱敏简表（自动掩码付款主账号、完整保留外部涉诈收款账号）」。",
+      c4_b1: "内置 100% 净室合成跨国航运结算 BEC 演示数据集（Apex Maritime GmbH）",
+      c4_b2: "原生浏览器 @media print A4 排版直出 PDF，零第三方转换服务器",
+      sec_sec_title: "可验证供应链安全与净室架构承诺",
+      sec_sec_sub: "全面对齐 OpenSSF Best Practices 银牌规范、OpenSSF OSPS Baseline Level 3（欧盟 CRA）与 SLSA Build Level 3。",
+      g1_title: "浏览器级 CSP 强制断网隔离",
+      g1_desc: "通过 meta Content-Security-Policy (default-src 'none') 锁定零外联；本地回单图片仅通过临时 blob: 内存引用展示，关闭标签页即刻销毁。",
+      g2_title: "与 StarShield 电子取证套件协同",
+      g2_desc: "可与 starshield-forensics（Chromium/Electron 缓存底层恢复与 PNG/JPEG 容器溯源工具）无缝衔接，形成从底层提取到台账出表的完整闭环。",
+      g3_title: "100% 净室合成标准测试基准",
+      g3_desc: "仓库内置演示案例及全部测试账号（DE89370400440532013000 / GB82WEST12345698765432 等）均严格采用国际标准虚构校验向量，零真实敏感数据。",
+      cli_title: "气隙离线部署与命令行安全自检",
+      cli_desc: "既可直接访问 GitHub Pages 在线静态版，也可下载离线包在断网电脑双击打开 web/app.html，或通过零依赖 Python 3.10+ 工具包执行 CSP 校验。",
+      cli_btn: "立即打开四舱工作台 \u2192",
+      footer_copy: "澄镜 ClearLens v1.0.0 · 作者：肖子琦 (Ziqi Xiao) · MIT 开源协议",
+      footer_disclaimer: "独立蓝队事件分诊与资金对账辅助工具，所生成清册仅供合规与法务沟通参考，不构成正式法律意见书。",
+      f_app: "四舱离线工作台"
+    }
+  };
+
+  var currentLang = (navigator.language || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en";
+
+  function applyLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+    var pack = DICT[lang] || DICT.en;
+    var nodes = document.querySelectorAll("[data-i18n]");
+    for (var i = 0; i < nodes.length; i++) {
+      var key = nodes[i].getAttribute("data-i18n");
+      if (pack[key]) {
+        nodes[i].textContent = pack[key];
+      }
+    }
+    var btn = document.getElementById("btn-lang-toggle");
+    if (btn) {
+      btn.textContent = lang === "zh" ? "Switch to EN" : "切换中文 (ZH)";
+    }
+  }
+
+  document.getElementById("btn-lang-toggle").addEventListener("click", function () {
+    applyLanguage(currentLang === "en" ? "zh" : "en");
+  });
+
+  applyLanguage(currentLang);
+})();
+</script>
+</body>
+</html>

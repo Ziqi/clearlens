@@ -1,0 +1,158 @@
+# SPDX-FileCopyrightText: 2026 Ziqi Xiao
+# SPDX-License-Identifier: MIT
+
+name: Pages Deployment, SBOM & SLSA Level 3 Provenance
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Optional release tag (e.g., v1.0.0) to attest and attach SLSA L3 provenance"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-pages:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - name: Enforce Zero-Backend Offline CSP Gate Prior to Pages Publish
+        run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python -m clearlens verify ./web
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - name: Upload Static Workbench Bundle
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: ./web
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+  build-and-attest:
+    if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.release_tag != '')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    outputs:
+      subjects_b64: ${{ steps.subjects.outputs.subjects_b64 }}
+      release_tag: ${{ steps.subjects.outputs.release_tag }}
+      sbom_path: ${{ steps.subjects.outputs.sbom_path }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.release_tag }}
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - name: Build Reproducible Offline ZIP, PYZ & SPDX 2.3 SBOM and Cross-Verify Release Assets
+        id: subjects
+        env:
+          INPUT_TAG: ${{ inputs.release_tag }}
+          EVENT_TAG: ${{ github.event.release.tag_name }}
+          REPO_SLUG: ${{ github.repository }}
+          WORKFLOW_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          TAG="${EVENT_TAG:-${INPUT_TAG}}"
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid release tag format: $TAG" >&2
+            exit 1
+          fi
+          HEAD_SHA="$(git rev-parse HEAD)"
+          if [[ "$HEAD_SHA" != "$WORKFLOW_SHA" ]]; then
+            echo "Ref/SHA mismatch: checked out $HEAD_SHA for $TAG, but workflow_dispatch ran on $WORKFLOW_SHA. Re-run with --ref $TAG." >&2
+            exit 1
+          fi
+          VER="${TAG#v}"
+          mkdir -p dist /tmp/release_verify
+          python scripts/build_reproducible_bundle.py --verify --version "$VER" --dist-dir dist
+          python scripts/generate_spdx_sbom.py \
+            --verify \
+            --version "$VER" \
+            --offline-zip "dist/clearlens-offline-${TAG}.zip" \
+            --pyz dist/clearlens.pyz \
+            --output "dist/clearlens-${VER}.spdx.json"
+
+          for ASSET in "clearlens-offline-${TAG}.zip" "clearlens.pyz" "clearlens-${VER}.spdx.json"; do
+            curl -fsSL -o "/tmp/release_verify/${ASSET}" \
+              "https://github.com/${REPO_SLUG}/releases/download/${TAG}/${ASSET}"
+            cmp -s "dist/${ASSET}" "/tmp/release_verify/${ASSET}" || {
+              echo "Release asset byte mismatch against clean-room reproducible build: ${ASSET}" >&2
+              exit 1
+            }
+          done
+
+          B64="$(cd dist && sha256sum \
+            "clearlens-offline-${TAG}.zip" \
+            clearlens.pyz \
+            "clearlens-${VER}.spdx.json" | base64 -w0)"
+          echo "subjects_b64=${B64}" >> "$GITHUB_OUTPUT"
+          echo "release_tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "sbom_path=dist/clearlens-${VER}.spdx.json" >> "$GITHUB_OUTPUT"
+
+      - name: Attest Build Provenance (Sigstore Fulcio + Rekor)
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            dist/clearlens-offline-*.zip
+            dist/clearlens.pyz
+            dist/clearlens-*.spdx.json
+
+      - name: Attest SPDX 2.3 SBOM (Sigstore Fulcio + Rekor)
+        uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
+        with:
+          subject-path: |
+            dist/clearlens-offline-*.zip
+            dist/clearlens.pyz
+          sbom-path: ${{ steps.subjects.outputs.sbom_path }}
+
+      - name: Upload Deterministic Release Bundle & SPDX 2.3 SBOM Artifacts
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: clearlens-release-bundle-and-sbom
+          path: |
+            dist/clearlens-offline-*.zip
+            dist/clearlens.pyz
+            dist/clearlens-*.spdx.json
+          if-no-files-found: error
+          retention-days: 30
+
+  slsa3-provenance:
+    if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.release_tag != '')
+    needs: [build-and-attest]
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+    # Note: slsa-framework/slsa-github-generator's isolated trusted builder requires semantic tag refs (@vX.Y.Z)
+    # rather than commit SHAs so slsa-verifier can validate the OIDC builder identity claim (OpenSSF Scorecard allowlisted).
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0
+    with:
+      base64-subjects: "${{ needs.build-and-attest.outputs.subjects_b64 }}"
+      upload-assets: true
+      upload-tag-name: "${{ needs.build-and-attest.outputs.release_tag }}"
+      provenance-name: "multiple.intoto.jsonl"

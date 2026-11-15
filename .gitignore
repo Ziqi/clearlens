@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: 2026 Ziqi Xiao
+# SPDX-License-Identifier: MIT
+
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.coverage
+.ruff_cache/
+.pytest_cache/
+.DS_Store

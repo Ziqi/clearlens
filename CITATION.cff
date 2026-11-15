@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+title: "ClearLens (澄镜): Zero-Backend Financial Fraud, BEC & Digital Coercion Triage Workbench with Outbound DLP and Multi-Currency Exposure De-duplication"
+message: "If you use ClearLens in corporate BEC incident response, cross-border wire-fraud accounting reconciliation, or defensive crisis-communication research, please cite this software."
+type: software
+authors:
+  - family-names: "Xiao"
+    given-names: "Ziqi"
+repository-code: "https://github.com/Ziqi/clearlens"
+url: "https://ziqi.github.io/clearlens/"
+version: "1.0.0"
+date-released: "2026-11-15"
+license: "MIT"
+keywords:
+  - "business-email-compromise"
+  - "wire-fraud-triage"
+  - "outbound-dlp"
+  - "swift-recall"
+  - "multi-currency-reconciliation"
+  - "offline-first"
+  - "zero-backend"
+  - "iban-mod97"

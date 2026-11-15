@@ -1,0 +1,146 @@
+# SPDX-FileCopyrightText: 2026 Ziqi Xiao
+# SPDX-License-Identifier: MIT
+
+header:
+  schema-version: '2.0.0'
+  last-updated: '2026-11-15'
+  last-reviewed: '2026-11-15'
+  url: https://github.com/Ziqi/clearlens/blob/main/SECURITY-INSIGHTS.yml
+  comment: >
+    Machine-readable OpenSSF Security Insights (v2.0.0) and OSPS Baseline
+    Level 3 manifest for ClearLens.
+
+project:
+  name: clearlens
+  homepage: https://ziqi.github.io/clearlens/
+  roadmap: https://github.com/Ziqi/clearlens/blob/main/SECURITY_ASSURANCE_CASE.md
+  funding: https://github.com/Ziqi/clearlens/blob/main/funding.json
+  administrators:
+    - name: Ziqi Xiao
+      affiliation: Independent Security Architect & Digital Forensics Researcher
+      email: 2196305+Ziqi@users.noreply.github.com
+      social: https://github.com/Ziqi
+      primary: true
+  repositories:
+    - name: clearlens
+      url: https://github.com/Ziqi/clearlens
+      comment: >
+        Zero-backend client-side BEC, wire-fraud & digital coercion triage
+        workbench with Outbound DLP guardrails, multi-currency FX de-duplication,
+        and pure Python >=3.10 CSP/ledger verification CLI.
+  vulnerability-reporting:
+    reports-accepted: true
+    bug-bounty-available: false
+    contact:
+      name: Ziqi Xiao
+      email: 2196305+Ziqi@users.noreply.github.com
+      primary: true
+    security-policy: https://github.com/Ziqi/clearlens/blob/main/SECURITY.md
+    in-scope:
+      - Content-Security-Policy bypass or unintended remote network connection in web/*.html
+      - DOM XSS or CSV formula injection in schedule generation
+      - Outbound DLP or HMAC PII redaction bypass
+      - parser memory exhaustion or build reproducibility flaw
+    out-of-scope:
+      - social engineering
+      - host OS malware outside browser sandbox
+    comment: >
+      Submit reports privately via GitHub Private Vulnerability Reporting
+      (https://github.com/Ziqi/clearlens/security/advisories/new) with a 48-hour SLA.
+  documentation:
+    quickstart-guide: https://github.com/Ziqi/clearlens#quickstart
+    detailed-guide: https://ziqi.github.io/clearlens/
+    code-of-conduct: https://github.com/Ziqi/clearlens/blob/main/CODE_OF_CONDUCT.md
+    release-process: https://github.com/Ziqi/clearlens/blob/main/SECURITY_ASSURANCE_CASE.md
+    signature-verification: https://github.com/Ziqi/clearlens#cryptographic-provenance-verification-slsa-level-3
+
+repository:
+  url: https://github.com/Ziqi/clearlens
+  status: active
+  bug-fixes-only: false
+  accepts-change-request: true
+  accepts-automated-change-request: true
+  no-third-party-packages: true
+  core-team:
+    - name: Ziqi Xiao
+      affiliation: Independent Security Architect & Digital Forensics Researcher
+      email: 2196305+Ziqi@users.noreply.github.com
+      social: https://github.com/Ziqi
+      primary: true
+  documentation:
+    contributing-guide: https://github.com/Ziqi/clearlens/blob/main/CONTRIBUTING.md
+    dependency-management-policy: https://github.com/Ziqi/clearlens/blob/main/SECURITY_ASSURANCE_CASE.md
+    governance: https://github.com/Ziqi/clearlens/blob/main/GOVERNANCE.md
+    review-policy: https://github.com/Ziqi/clearlens/blob/main/CONTRIBUTING.md
+    security-policy: https://github.com/Ziqi/clearlens/blob/main/SECURITY.md
+  license:
+    url: https://github.com/Ziqi/clearlens/blob/main/LICENSE
+    expression: MIT
+  release:
+    automated-pipeline: true
+    changelog: https://github.com/Ziqi/clearlens/releases
+    license:
+      url: https://github.com/Ziqi/clearlens/blob/main/LICENSE
+      expression: MIT
+    distribution-points:
+      - uri: https://github.com/Ziqi/clearlens/releases/tag/v1.0.0
+        comment: Official GitHub Release v1.0.0 with air-gapped offline ZIP, Python zipapp, SPDX 2.3 SBOM, and SLSA L3 provenance.
+      - uri: https://ziqi.github.io/clearlens/
+        comment: Zero-backend static GitHub Pages workbench isolated via strict Content-Security-Policy.
+    attestations:
+      - name: GitHub OIDC Sigstore Build Provenance & SBOM Attestations
+        predicate-uri: https://slsa.dev/provenance/v1
+        location: https://github.com/Ziqi/clearlens/attestations
+        comment: Sigstore Fulcio X.509 and Rekor transparency log attestations verifiable via gh attestation verify.
+      - name: SLSA Build Level 3 Isolated Provenance
+        predicate-uri: https://slsa.dev/provenance/v0.2
+        location: https://github.com/Ziqi/clearlens/releases/download/v1.0.0/multiple.intoto.jsonl
+        comment: Non-forgeable SLSA v1.0 Level 3 provenance generated via slsa-framework/slsa-github-generator.
+  security:
+    assessments:
+      self:
+        name: NIST IR 7608 Structured Security Assurance Case
+        evidence: https://github.com/Ziqi/clearlens/blob/main/SECURITY_ASSURANCE_CASE.md
+        date: '2026-11-15'
+        comment: Threat model, CSP isolation proofs, CWE countermeasures, and reproducibility guarantees.
+    champions:
+      - name: Ziqi Xiao
+        email: 2196305+Ziqi@users.noreply.github.com
+        primary: true
+    tools:
+      - name: ClusterFuzzLite / Atheris
+        type: Fuzzing
+        rulesets:
+          - coverage-guided-and-stdlib-mutation
+        integration:
+          adhoc: true
+          ci: true
+          release: true
+        results: {}
+      - name: CodeQL
+        type: SAST
+        rulesets:
+          - python-and-javascript
+        integration:
+          adhoc: false
+          ci: true
+          release: true
+        results: {}
+      - name: Bandit
+        type: SAST
+        rulesets:
+          - default
+        integration:
+          adhoc: true
+          ci: true
+          release: true
+        results: {}
+      - name: Dependabot
+        type: SCA
+        rulesets:
+          - github-actions
+        integration:
+          adhoc: false
+          ci: true
+          release: false
+        results: {}
